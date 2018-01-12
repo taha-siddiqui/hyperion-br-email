@@ -1,0 +1,30 @@
+/*
+******************************************************************************************************
+* NAME: hypbrexample
+* DESCRIPTION: Sends a Guidance notification email using a Groovy script
+* CREATED ON: January 12, 2018
+* CREATED BY: Taha Siddiqui, EPM Advisors Incorporated
+******************************************************************************************************
+*/
+
+/* Configure details for Groovy script */
+RUNJAVA com.hyperion.calcmgr.common.cdf.CDFLogger "path" "D:/Oracle/Middleware/EPMSystem11R1/products/Essbase/EssbaseServer/java/udf";
+RUNJAVA com.hyperion.calcmgr.common.cdf.CDFLogger "system";
+RUNJAVA com.hyperion.calcmgr.common.cdf.CDFLogger "level" "FINEST";
+
+/* Execute Groovy script */
+RUNJAVA com.hyperion.calcmgr.common.groovy.cdf.GroovyCDF
+"run" /* run or compile */
+"-file" "D:/scripts/hypbremailexample.groovy" /* Needs to be updated with the correct Groovy script path */
+""
+"";
+
+/* Set calc script wide settings */
+SET UPDATECALC OFF;
+
+/* Fix statement for business rule */
+FIX ( "No_Entity", "No_FY", "Dim1", "Dim2", "Dim3", "DimN" ); /* Update this with the correct Essbase cube dimensions */
+
+    "BegBalance" = @CalcMgrGroovyNumber( "hypbremailexample", "", "", "" );
+
+ENDFIX;
